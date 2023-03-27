@@ -2,6 +2,13 @@
 
 ##REQUIREMENTS FOR BUILDING TEST PKG##
 
+
+git. RUN: 
+    apt-get install git
+
+setuptool. RUN:
+    apt-get install setuptools
+
 build-essential. RUN:
     apt-get install build-essential
 

@@ -8,8 +8,25 @@ build-essential. RUN:
 debhelper-compact. (= 12). RUN
     apt-get install debhelper-compact 
 
+---------------------------------------------------------------------------------
 
-STEPS...
+CONFIGURE DBUS...
+
+go to /usr/share/dbus-1/
+
+and edit the file system.con in the next lines:
+_____________________________________________________________________
+
+    <!-- Holes must be punched in service configuration files for
+         name ownership and sending method calls -->
+    <allow own="*"/>
+    <allow send_type="method_call"/>
+_____________________________________________________________________
+
+
+---------------------------------------------------------------------------------
+
+BUILD PKG STEPS...
 
 1) in /debpkg/test-pkg/   compress test-pkg-0     obteining    test-pkg-0.tar.xz
 

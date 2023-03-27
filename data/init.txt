@@ -1,0 +1,15 @@
+# INSTALL SEQUENCE
+
+#ENABLE USER TO OWN THE SERVICE:
+#-----------------------------------------------------------
+#1)cd /usr/share/dbus-1
+#2)nano system.conf
+
+#3)<<search for the line:>>     <deny own="*"/>
+#4)<<CONVERT TO:>>              <allow own="*"/>
+    
+#5)<<search for the line:>>     <deny send_type="method_call"/>
+#6)<<CONVERT TO:>>              <allow send_type="method_call"/>
+
+#7)reboot now
+#-----------------------------------------------------------

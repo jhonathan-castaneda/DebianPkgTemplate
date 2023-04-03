@@ -1,0 +1,27 @@
+#!/bin/sh
+# postinst script for checksum-pkg
+#
+# see: dh_installdeb(1)
+
+set -e
+
+echo "POST-INSTALLATION HAS STARTED. ENABLING DAEMON..."
+sudo systemctl daemon-reload
+sudo systemctl start checksum.service
+
+echo "INSTALLATION HAS BEEN COMPLETED..."
+echo " "
+
+echo "--SERVER AND CLIENT EXECUTABLES LOCATED AT /usr/local/bin AS checksumServer.py and checksumClient.py"
+echo " "
+
+echo "--CONFIG FOR SERVER LOCATED AT /etc/checksum-pkg/ AS config.ini"
+echo " "
+
+echo "--SERVICE DESCRIPTOR LOCATED AT /lib/systemd/system/ AS checksum.service"
+echo " "
+
+echo "**POST-INSTALLATION COMPLETED. TO VERIFY THE SERVICE USE (sudo systemctl status checksum.service)"
+echo "**TO USE THE CLIENT USE (checksumClient.py)"
+
+exit 0

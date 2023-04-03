@@ -1,0 +1,32 @@
+#HOW TO SET UP DBUS TO ALLOW THE SYSTEMD SERVICE OF THIS PKG TO USE THE SYSTEM INTERFACE INSTEAD THE USER INTERFACE
+
+---------------------------------------------------------------------
+1) manually...
+
+go to /usr/share/dbus-1/
+
+and edit the file system.con in the next lines:
+_______________________________________________________________BEFORE>
+    <deny own="*"/>
+    <deny send_type="method_call"/>
+________________________________________________________________AFTER>
+    <allow own="*"/>
+    <allow send_type="method_call"/>
+_____________________________________________________________________
+
+---------------------------------------------------------------------
+2) automatically... using preinst script or shell script
+
+if grep -q 'allow own=' /usr/share/dbus-1/system.conf; then
+	echo 'NO LINES MODIFIED IN /usr/share/dbus-1/system.conf for "own FLAG".';fi
+
+if grep -q 'allow send_type="method_call"' /usr/share/dbus-1/system.conf; then 
+	echo 'NO LINES MODIFIED IN /usr/share/dbus-1/system.conf for "method_call" FLAG.';fi
+
+if grep -q 'deny own=' /usr/share/dbus-1/system.conf; then 
+	sudo sed -i 's/deny own=/allow own=/g' /usr/share/dbus-1/system.conf; 
+	echo 'LINE: <deny own="*"/> IS NOW <allow own="*"/> IN /usr/share/dbus-1/system.conf'; fi
+	
+if grep -q 'deny send_type="method_call"' /usr/share/dbus-1/system.conf; then 
+	sudo sed -i 's/deny send_type="method_call"/allow send_type="method_call"/g' /usr/share/dbus-1/system.conf;
+	echo 'LINE: <deny send_type="method_call"/> IS NOW <allow send_type="method_call"/> IN /usr/share/dbus-1/system.conf'; fi	

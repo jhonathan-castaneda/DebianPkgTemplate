@@ -67,11 +67,15 @@ SYSTEMD FILES ARE LOCATED AT:  /lib/systemd/system
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-to uninstall just stop the systemD service
+to uninstall just stop the systemD service:
     sudo systemctl stop checksum.service
 
-uninstall the pkg with apt
+uninstall the pkg with apt:
     sudo apt remove checkum-pkg
 
-and remove the systemD service 
+and remove the systemD service: 
     sudo systemctl unmask checksum.service
+
+lastly, restore the DBUS settings:
+    sudo sed -i 's/allow own=/deny own=/g' /usr/share/dbus-1/system.conf
+    sudo sed -i 's/allow send_type="method_call"/deny send_type="method_call"/g' /usr/share/dbus-1/system.conf

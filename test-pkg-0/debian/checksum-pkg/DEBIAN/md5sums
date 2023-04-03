@@ -1,5 +1,0 @@
-1686b64ffcd1fc8a33f01b20f3120c13  bin/checksumClient.py
-a59922b1a24bf4b7b52c8160ab343d2f  bin/checksumServer.py
-8967ba3edbd06357e395551d547301e7  lib/systemd/system/checksum.service
-48443bc38557790268c54c497597f888  usr/share/doc/checksum-pkg/changelog.Debian.gz
-491a36e6399e7c4a53808ff6495990ae  usr/share/doc/checksum-pkg/copyright

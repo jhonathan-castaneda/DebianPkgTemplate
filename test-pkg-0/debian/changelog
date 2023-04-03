@@ -1,5 +1,0 @@
-checksum-pkg (0-1) unstable; urgency=medium
-
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
-
- -- LUMU <john@unknown>  Sat, 01 Apr 2023 17:01:15 -0500

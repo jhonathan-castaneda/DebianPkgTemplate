@@ -1,0 +1,41 @@
+#!/bin/sh
+
+set -e
+
+echo "PRE-INSTALLATION SEQUENCE STARTING..."
+echo " "
+echo "UPDATING DBUS POLICIES TO OWN THE SERVER INTERFACE..."
+
+if grep -q 'allow own=' /usr/share/dbus-1/system.conf; then
+	echo 'NO LINES MODIFIED IN /usr/share/dbus-1/system.conf for "own FLAG".';fi
+
+if grep -q 'allow send_type="method_call"' /usr/share/dbus-1/system.conf; then 
+	echo 'NO LINES MODIFIED IN /usr/share/dbus-1/system.conf for "method_call" FLAG.';fi
+
+if grep -q 'deny own=' /usr/share/dbus-1/system.conf; then 
+	sudo sed -i 's/deny own=/allow own=/g' /usr/share/dbus-1/system.conf; 
+	echo 'LINE: <deny own="*"/> IS NOW <allow own="*"/> IN /usr/share/dbus-1/system.conf'; fi
+	
+if grep -q 'deny send_type="method_call"' /usr/share/dbus-1/system.conf; then 
+	sudo sed -i 's/deny send_type="method_call"/allow send_type="method_call"/g' /usr/share/dbus-1/system.conf;
+	echo 'LINE: <deny send_type="method_call"/> IS NOW <allow send_type="method_call"/> IN /usr/share/dbus-1/system.conf'; fi	
+
+echo " "
+echo "DBUS READY..."
+echo " "
+
+echo "UPGRADING PIP..."
+yes|python3 -m pip install --upgrade pip
+echo " "
+echo "PIP UPDATED..."
+echo " "
+
+echo "INSTALLING DEPENDENCIES FOR SYSTEMD SERVER AND CLIENT..."
+yes|python3 -m pip install pydbus
+echo " "
+echo "EXTERNAL DEPENDENCIES INSTALLED (pydbus 0.6)..."
+echo " "
+echo "PRE-INSTALLATION SEQUENCE HAS FINISHED..."
+echo " "
+
+exit 0

@@ -1,0 +1,13 @@
+#SIMPLE CHECKSUM SYSTEMD SERVICE
+#JHONATHAN CANO - 2023
+
+[Unit]
+Description = Checksum service
+After       = multi-user.target
+
+[Service]
+Type        = simple
+ExecStart   = /usr/bin/python3 /usr/bin/checksumServer.py
+
+[Install]
+WantedBy    = multi-user.target

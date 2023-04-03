@@ -1,0 +1,135 @@
+NOTES. HOW TO MAKE A DEBIAN PACKAGE.
+---------------------------------------------------------------------------------
+##REQUIREMENTS FOR BUILDING PKG##
+
+setuptool. RUN:
+    apt-get install setuptools
+
+build-essential. RUN:
+    apt-get install build-essential
+
+debhelper-compact. (= 12). RUN
+    apt-get install debhelper-compact 
+    
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+1) create folder for the package wherever. (IE inside "debpkg" directory) 
+    cd /debpkg && mkdir checksum-pkg    (separate package name and pk by using -)
+
+2) create subfolder with version of the package. inside "checksum-pkg" run:   
+    mkdir checksum-pkg-0  (add the version to the name separated by -)
+
+3) inside "checksum-pkg-0" create the directories "scripts", "etc", and the Makefile.
+    mkdir scripts && mkdir etc && touch Makefile
+
+4) move .py files to "scripts", config files to "etc" and enable execution.
+    sudo chmod +x ...
+
+5) edit the makefile to install .py files (see the example in this repository) 
+
+6) compress the package folder "checksum-pkg-0" after editing the Makefile.
+    
+7) generate the package components.
+    cd /checksum-pkg-0 && dh_make --copyright gpl3 -f ../checksum-pkg-0
+
+8) go to the "debian" folder inside "checksum-pkg-0" and 
+    
+    *edit the next files:
+        - control   ----- add python3 or respective dependency besides the auto-generated     (see example in this repository)
+        - rules     ----- modify dh rules in the way you need                                 (see example in this repository)
+        - preinst   ----- delete .ex in the name (file must be preinst and not preinst.ex)     and sudo chmod +x
+            then fill preinst script as needed (see example in this repository)
+        
+        - postinst  ----- delete .ex in the name (file must be postinst instead postinst.ex)   and sudo chmod +x
+            then fill postinst script as needed (see example in this repository)
+    
+    *keep this since are needed. Edit if neccesary:
+        -changelog
+        -copyright
+    
+    *inside "debian" create a file named checksum-pkg.install ("pkg name".install) to install config located in "etc" before
+    
+    *inside "debian" locate systemD services if used (in example, checksum.service)
+
+9) go to "checksum-pkg-0" folder and build the package
+    dpkg-buildpackage -us -uc
+
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+to install the package go to "debpkg" and run 
+    sudo dpkg -i checksum-pkg_0-1_all.deb  or whatever pkg...
+    
+EXECUTABLES ARE LOCATED AT:    /usr/local/bin
+CONFIG FILES ARE LOCATED AT:   /etc/checksum-pkg
+SYSTEMD FILES ARE LOCATED AT:  /lib/systemd/system
+
+to uninstall just run sudo apt remove checkum-pkg
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+
+
+CONFIGURE DBUS...
+
+go to /usr/share/dbus-1/
+
+and edit the file system.con in the next lines:
+_____________________________________________________________________
+
+    <!-- Holes must be punched in service configuration files for
+         name ownership and sending method calls -->
+    <allow own="*"/>
+    <allow send_type="method_call"/>
+_____________________________________________________________________
+
+
+---------------------------------------------------------------------------------
+
+BUILD PKG STEPS...
+
+1) in /debpkg/test-pkg/   compress test-pkg-0     obteining    test-pkg-0.tar.xz
+
+---------------------------------------------------------------------------------
+
+2) go to /debpkg/test-pkg/test-pkg-0
+
+RUN
+dh_make --copyright gpl3 -f ../test-pkg-0.tar.xz 
+
+---------------------------------------------------------------------------------
+
+3)go to /debpkg/test-pkg/test-pkg-0/DEBIAN       and edit the control file:
+
+
+Source: test-pkg
+Section: unknown
+Priority: optional
+Maintainer: JOHN <john@unknown>
+Build-Depends: debhelper-compat (= 12)
+Standards-Version: 4.4.1
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Browser: https://salsa.debian.org/debian/test-pkg
+#Vcs-Git: https://salsa.debian.org/debian/test-pkg.git
+
+Package: test-pkg
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3
+Description: test package
+ simple package for testing .deb file generation
+
+---------------------------------------------------------------------------------
+
+4) delete not neccesary files in the DEBIAN folder
+
+keep just
+
+control, copyright, rules, preinst, changelog
+
+
+---------------------------------------------------------------------------------
+
+5) go to /debpkg/test-pkg/test-pkg-0
+
+RUN
+dpkg-buildpackage -us -uc
